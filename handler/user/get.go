@@ -14,7 +14,7 @@ func Get(c *gin.Context) {
 	// Get the user by the `username` from the database.
 	user, err := model.GetUser(username)
 	if err != nil {
-		SendResponse(c, errno.ErrUserNotFound, nil)
+		SendError(c, errno.ErrUserNotFound, nil, err.Error())
 		return
 	}
 

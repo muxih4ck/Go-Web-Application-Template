@@ -22,7 +22,7 @@ func Update(c *gin.Context) {
 	// Binding the user data.
 	var u model.UserModel
 	if err := c.Bind(&u); err != nil {
-		SendResponse(c, errno.ErrBind, nil)
+		SendBadRequest(c, errno.ErrBind, nil, err.Error())
 		return
 	}
 
@@ -31,19 +31,19 @@ func Update(c *gin.Context) {
 
 	// Validate the data.
 	if err := u.Validate(); err != nil {
-		SendResponse(c, errno.ErrValidation, nil)
+		SendError(c, errno.ErrValidation, nil, err.Error())
 		return
 	}
 
 	// Encrypt the user password.
 	if err := u.Encrypt(); err != nil {
-		SendResponse(c, errno.ErrEncrypt, nil)
+		SendError(c, errno.ErrEncrypt, nil, err.Error())
 		return
 	}
 
 	// Save changed fields.
 	if err := u.Update(); err != nil {
-		SendResponse(c, errno.ErrDatabase, nil)
+		SendError(c, errno.ErrDatabase, nil, err.Error())
 		return
 	}
 

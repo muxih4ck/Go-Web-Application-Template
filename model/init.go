@@ -5,14 +5,14 @@ import (
 
 	"github.com/lexkong/log"
 	"github.com/spf13/viper"
+
 	// MySQL driver.
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
 
 type Database struct {
-	Self   *gorm.DB
-	Docker *gorm.DB
+	Self *gorm.DB
 }
 
 var DB *Database
@@ -56,25 +56,12 @@ func GetSelfDB() *gorm.DB {
 	return InitSelfDB()
 }
 
-func InitDockerDB() *gorm.DB {
-	return openDB(viper.GetString("docker_db.username"),
-		viper.GetString("docker_db.password"),
-		viper.GetString("docker_db.addr"),
-		viper.GetString("docker_db.name"))
-}
-
-func GetDockerDB() *gorm.DB {
-	return InitDockerDB()
-}
-
 func (db *Database) Init() {
 	DB = &Database{
-		Self:   GetSelfDB(),
-		Docker: GetDockerDB(),
+		Self: GetSelfDB(),
 	}
 }
 
 func (db *Database) Close() {
 	DB.Self.Close()
-	DB.Docker.Close()
 }

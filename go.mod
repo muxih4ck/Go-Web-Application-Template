@@ -1,4 +1,4 @@
-module muxi
+module apiserver
 
 require (
 	github.com/StackExchange/wmi v0.0.0-20181212234831-e0a55b97c705 // indirect

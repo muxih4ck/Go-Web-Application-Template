@@ -21,12 +21,12 @@ var modelStructsMap sync.Map
 
 // ModelStruct model definition
 type ModelStruct struct {
-	PrimaryFields    []*StructField
-	StructFields     []*StructField
-	ModelType        reflect.Type
+	PrimaryFields []*StructField
+	StructFields  []*StructField
+	ModelType     reflect.Type
 
 	defaultTableName string
-	l sync.Mutex
+	l                sync.Mutex
 }
 
 // TableName returns model's table name
