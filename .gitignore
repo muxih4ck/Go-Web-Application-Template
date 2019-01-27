@@ -2,3 +2,5 @@
 main
 log
 .idea
+*.xml
+*.iml
