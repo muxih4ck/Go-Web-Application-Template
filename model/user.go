@@ -5,7 +5,7 @@ import (
 	"apiserver/pkg/constvar"
 	"fmt"
 
-	"gopkg.in/go-playground/validator.v9"
+	validator "gopkg.in/go-playground/validator.v9"
 )
 
 // User represents a registered user.
@@ -40,6 +40,13 @@ func (u *UserModel) Update() error {
 func GetUser(username string) (*UserModel, error) {
 	u := &UserModel{}
 	d := DB.Self.Where("username = ?", username).First(&u)
+	return u, d.Error
+}
+
+// GetUser gets an user by the user identifier.
+func GetUserById(id uint64) (*UserModel, error) {
+	u := &UserModel{}
+	d := DB.Self.Where("id = ?", id).First(&u)
 	return u, d.Error
 }
 

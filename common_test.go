@@ -8,7 +8,7 @@ import (
 	"apiserver/router/middleware"
 	"bytes"
 	"encoding/json"
-	"github.com/spf13/viper"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
@@ -16,6 +16,8 @@ import (
 	"strconv"
 	"testing"
 	"time"
+
+	"github.com/spf13/viper"
 
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/pflag"
@@ -39,7 +41,8 @@ func TestMain(m *testing.M) {
 	if err := config.Init(*cfgTest); err != nil {
 		panic(err)
 	}
-
+	fmt.Println(viper.GetString("db.password"))
+	fmt.Println(viper.GetString("db.addr"))
 	// init db
 	model.DB.Init()
 	defer model.DB.Close()

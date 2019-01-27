@@ -14,8 +14,8 @@ func GetReqID(c *gin.Context) string {
 	if !ok {
 		return ""
 	}
-	if requestId, ok := v.(string); ok {
-		return requestId
+	if requestID, ok := v.(string); ok {
+		return requestID
 	}
 	return ""
 }
