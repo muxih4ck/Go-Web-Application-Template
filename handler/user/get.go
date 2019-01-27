@@ -17,6 +17,5 @@ func Get(c *gin.Context) {
 		SendError(c, errno.ErrUserNotFound, nil, err.Error())
 		return
 	}
-
 	SendResponse(c, nil, user)
 }

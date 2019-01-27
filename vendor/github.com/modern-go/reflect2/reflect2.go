@@ -136,7 +136,7 @@ type frozenConfig struct {
 func (cfg Config) Froze() *frozenConfig {
 	return &frozenConfig{
 		useSafeImplementation: cfg.UseSafeImplementation,
-		cache: concurrent.NewMap(),
+		cache:                 concurrent.NewMap(),
 	}
 }
 

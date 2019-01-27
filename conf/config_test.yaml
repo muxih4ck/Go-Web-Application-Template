@@ -1,4 +1,4 @@
-runmode: debug                 # 开发模式, debug, release, test 部署时环境变量覆盖
+runmode: test                 # 开发模式, debug, release, test 部署时环境变量覆盖
 addr: :8080                  # HTTP绑定端口
 name: apiserver              # API Server的名字
 url: http://127.0.0.1:8080   # pingServer函数请求的API服务器的ip:port
@@ -15,6 +15,6 @@ log:
   log_backup_count: 7
 db:  # DB 配置 部署时环境变量覆盖
   name: db_apiserver
-  addr: 0.0.0.0:3306
+  addr: 127.0.0.1:3306
   username: root
-  password: ilovemuxi
+  password: root

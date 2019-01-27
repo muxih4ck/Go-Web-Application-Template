@@ -1,12 +1,11 @@
 package model
 
 import (
-	"fmt"
-
 	"apiserver/pkg/auth"
 	"apiserver/pkg/constvar"
+	"fmt"
 
-	validator "gopkg.in/go-playground/validator.v9"
+	"gopkg.in/go-playground/validator.v9"
 )
 
 // User represents a registered user.
