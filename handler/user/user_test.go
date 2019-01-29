@@ -1,14 +1,15 @@
-package main
+package user
 
 import (
 	"apiserver/config"
-	"apiserver/handler/user"
 	"apiserver/model"
-	"apiserver/router"
 	"apiserver/router/middleware"
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"github.com/gin-gonic/gin"
+	"github.com/spf13/pflag"
+	"github.com/spf13/viper"
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
@@ -16,17 +17,13 @@ import (
 	"strconv"
 	"testing"
 	"time"
-
-	"github.com/spf13/viper"
-
-	"github.com/gin-gonic/gin"
-	"github.com/spf13/pflag"
 )
 
+
 var (
-	cfgTest  = pflag.StringP("config_test", "t", "", "apiserver config file path.")
+	cfgTest  = pflag.StringP("config", "t", "", "apiserver config file path.")
 	g        *gin.Engine
-	token    string
+	tokenString    string
 	username string
 	password string
 	uid      uint64
@@ -49,22 +46,14 @@ func TestMain(m *testing.M) {
 	//Set Gin to Test Mode
 	gin.SetMode(viper.GetString("runmode"))
 
-	g = gin.New()
-	router.Load(
-		// Cores.
-		g,
-
-		// Middlwares.
-		middleware.Logging(),
-		middleware.RequestId(),
-	)
-	// Run the other tests in m.Run()
 	os.Exit(m.Run())
 }
 
 func TestLogin(t *testing.T) {
+	g := getRouter(true)
+
 	uri := "/login"
-	u := user.CreateRequest{
+	u := CreateRequest{
 		Username: "admin",
 		Password: "admin",
 	}
@@ -80,13 +69,13 @@ func TestLogin(t *testing.T) {
 
 	defer result.Body.Close()
 
-	// 读取响应body,获取token
+	// 读取响应body,获取tokenString
 	var data model.LoginResponse
 	bodyByte, _ := ioutil.ReadAll(result.Body)
 	if err := json.Unmarshal(bodyByte, &data); err != nil {
 		t.Errorf("Test error: Get LoginResponse Error:%s", err.Error())
 	}
-	token = data.Data.Token
+	tokenString = data.Data.Token
 
 	if result.StatusCode != http.StatusOK {
 		t.Errorf("Test Error: StatusCode Error:%d", result.StatusCode)
@@ -94,12 +83,13 @@ func TestLogin(t *testing.T) {
 }
 
 func TestCreate(t *testing.T) {
+	g := getRouter(true)
 	uri := "/v1/user"
 
 	username = strconv.FormatInt(time.Now().Unix(), 10)
 	password = strconv.FormatInt(time.Now().Unix(), 10)
 
-	u := user.CreateRequest{
+	u := CreateRequest{
 		Username: username,
 		Password: password,
 	}
@@ -108,7 +98,7 @@ func TestCreate(t *testing.T) {
 		t.Errorf("Test Error: %s", err.Error())
 	}
 	req := httptest.NewRequest(http.MethodPost, uri, bytes.NewReader(jsonByte))
-	req.Header.Set("Authorization", "Bearer "+token)
+	req.Header.Set("Authorization", "Bearer "+tokenString)
 	req.Header.Set("Content-Type", "application/json")
 	w := httptest.NewRecorder()
 	g.ServeHTTP(w, req)
@@ -127,10 +117,11 @@ func TestCreate(t *testing.T) {
 }
 
 func TestGet(t *testing.T) {
+	g := getRouter(true)
 	uri := "/v1/user/" + username
 
 	req := httptest.NewRequest(http.MethodGet, uri, nil)
-	req.Header.Set("Authorization", "Bearer "+token)
+	req.Header.Set("Authorization", "Bearer "+tokenString)
 	w := httptest.NewRecorder()
 	g.ServeHTTP(w, req)
 	result := w.Result()
@@ -141,8 +132,9 @@ func TestGet(t *testing.T) {
 }
 
 func TestUpdate(t *testing.T) {
+	g := getRouter(true)
 	uri := "/v1/user/" + strconv.FormatInt(int64(uid), 10)
-	u := user.CreateRequest{
+	u := CreateRequest{
 		Username: "test" + username,
 		Password: "test" + password,
 	}
@@ -151,7 +143,7 @@ func TestUpdate(t *testing.T) {
 		t.Errorf("Test Error: %s", err.Error())
 	}
 	req := httptest.NewRequest(http.MethodPut, uri, bytes.NewReader(jsonByte))
-	req.Header.Set("Authorization", "Bearer "+token)
+	req.Header.Set("Authorization", "Bearer "+tokenString)
 	req.Header.Set("Content-Type", "application/json")
 	w := httptest.NewRecorder()
 	g.ServeHTTP(w, req)
@@ -162,10 +154,11 @@ func TestUpdate(t *testing.T) {
 }
 
 func TestList(t *testing.T) {
+	g := getRouter(true)
 	uri := "/v1/user"
 
 	req := httptest.NewRequest(http.MethodGet, uri, nil)
-	req.Header.Set("Authorization", "Bearer "+token)
+	req.Header.Set("Authorization", "Bearer "+tokenString)
 	w := httptest.NewRecorder()
 	g.ServeHTTP(w, req)
 	result := w.Result()
@@ -176,10 +169,11 @@ func TestList(t *testing.T) {
 }
 
 func TestDelete(t *testing.T) {
+	g := getRouter(true)
 	uri := "/v1/user/" + strconv.FormatInt(int64(uid), 10)
 
 	req := httptest.NewRequest(http.MethodDelete, uri, nil)
-	req.Header.Set("Authorization", "Bearer "+token)
+	req.Header.Set("Authorization", "Bearer "+tokenString)
 	w := httptest.NewRecorder()
 	g.ServeHTTP(w, req)
 	result := w.Result()
@@ -188,4 +182,50 @@ func TestDelete(t *testing.T) {
 		t.Errorf("Test Error: StatusCode Error:%d", result.StatusCode)
 	}
 
+}
+
+// Helper function to create a router during testing
+func getRouter(withRouter bool) *gin.Engine {
+	g = gin.New()
+	if withRouter {
+		loadRouters(
+			// Cores.
+			g,
+
+			// Middlwares.
+			middleware.Logging(),
+			middleware.RequestId(),
+		)
+	}
+	return g
+}
+
+// Load loads the middlewares, routes, handlers about Test
+func loadRouters(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
+	// Middlewares.
+	g.Use(gin.Recovery())
+	g.Use(middleware.NoCache)
+	g.Use(middleware.Options)
+	g.Use(middleware.Secure)
+	g.Use(mw...)
+	// 404 Handler.
+	g.NoRoute(func(c *gin.Context) {
+		c.String(http.StatusNotFound, "The incorrect API route.")
+	})
+
+	// api for authentication functionalities
+	g.POST("/login", Login)
+
+	// The user handlers, requiring authentication
+	u := g.Group("/v1/user")
+	u.Use(middleware.AuthMiddleware())
+	{
+		u.POST("", Create)
+		u.DELETE("/:id", Delete)
+		u.PUT("/:id", Update)
+		u.GET("", List)
+		u.GET("/:username", Get)
+	}
+
+	return g
 }
