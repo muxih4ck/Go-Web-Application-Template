@@ -1,19 +1,15 @@
 package user
 
 import (
-	"apiserver/config"
 	"apiserver/model"
 	"apiserver/router/middleware"
 	"bytes"
 	"encoding/json"
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/pflag"
-	"github.com/spf13/viper"
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
-	"os"
 	"strconv"
 	"testing"
 	"time"
@@ -28,26 +24,6 @@ var (
 	password string
 	uid      uint64
 )
-
-// This function is used to do setup before executing the test functions
-func TestMain(m *testing.M) {
-
-	pflag.Parse()
-
-	// init config
-	if err := config.Init(*cfgTest); err != nil {
-		panic(err)
-	}
-	fmt.Println(viper.GetString("db.password"))
-	fmt.Println(viper.GetString("db.addr"))
-	// init db
-	model.DB.Init()
-	defer model.DB.Close()
-	//Set Gin to Test Mode
-	gin.SetMode(viper.GetString("runmode"))
-
-	os.Exit(m.Run())
-}
 
 func TestLogin(t *testing.T) {
 	g := getRouter(true)
