@@ -5,10 +5,10 @@ import (
 	"net/http"
 	"time"
 
-	"apiserver/config"
-	"apiserver/model"
-	"apiserver/router"
-	"apiserver/router/middleware"
+	"github.com/muxih4ck/Go-Web-Application-Template/config"
+	"github.com/muxih4ck/Go-Web-Application-Template/model"
+	"github.com/muxih4ck/Go-Web-Application-Template/router"
+	"github.com/muxih4ck/Go-Web-Application-Template/router/middleware"
 
 	"github.com/gin-gonic/gin"
 	"github.com/lexkong/log"

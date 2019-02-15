@@ -1,9 +1,9 @@
 package middleware
 
 import (
-	"apiserver/handler"
-	"apiserver/pkg/errno"
-	"apiserver/pkg/token"
+	"github.com/muxih4ck/Go-Web-Application-Template/handler"
+	"github.com/muxih4ck/Go-Web-Application-Template/pkg/errno"
+	"github.com/muxih4ck/Go-Web-Application-Template/pkg/token"
 
 	"github.com/gin-gonic/gin"
 )

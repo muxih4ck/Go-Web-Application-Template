@@ -3,9 +3,9 @@ package router
 import (
 	"net/http"
 
-	"apiserver/handler/sd"
-	"apiserver/handler/user"
-	"apiserver/router/middleware"
+	"github.com/muxih4ck/Go-Web-Application-Template/handler/sd"
+	"github.com/muxih4ck/Go-Web-Application-Template/handler/user"
+	"github.com/muxih4ck/Go-Web-Application-Template/router/middleware"
 
 	"github.com/gin-gonic/gin"
 )

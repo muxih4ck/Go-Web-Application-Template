@@ -1,11 +1,11 @@
 package user
 
 import (
-	. "apiserver/handler"
-	"apiserver/model"
-	"apiserver/pkg/auth"
-	"apiserver/pkg/errno"
-	"apiserver/pkg/token"
+	. "github.com/muxih4ck/Go-Web-Application-Template/handler"
+	"github.com/muxih4ck/Go-Web-Application-Template/model"
+	"github.com/muxih4ck/Go-Web-Application-Template/pkg/auth"
+	"github.com/muxih4ck/Go-Web-Application-Template/pkg/errno"
+	"github.com/muxih4ck/Go-Web-Application-Template/pkg/token"
 
 	"github.com/gin-gonic/gin"
 )

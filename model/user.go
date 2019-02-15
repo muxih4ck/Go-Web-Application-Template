@@ -1,8 +1,8 @@
 package model
 
 import (
-	"apiserver/pkg/auth"
-	"apiserver/pkg/constvar"
+	"github.com/muxih4ck/Go-Web-Application-Template/pkg/auth"
+	"github.com/muxih4ck/Go-Web-Application-Template/pkg/constvar"
 	"fmt"
 
 	validator "gopkg.in/go-playground/validator.v9"

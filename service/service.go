@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"sync"
 
-	"apiserver/model"
-	"apiserver/util"
+	"github.com/muxih4ck/Go-Web-Application-Template/model"
+	"github.com/muxih4ck/Go-Web-Application-Template/util"
 )
 
 func ListUser(username string, offset, limit int) ([]*model.UserInfo, uint64, error) {

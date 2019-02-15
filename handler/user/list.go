@@ -1,9 +1,9 @@
 package user
 
 import (
-	. "apiserver/handler"
-	"apiserver/pkg/errno"
-	"apiserver/service"
+	. "github.com/muxih4ck/Go-Web-Application-Template/handler"
+	"github.com/muxih4ck/Go-Web-Application-Template/pkg/errno"
+	"github.com/muxih4ck/Go-Web-Application-Template/service"
 
 	"github.com/gin-gonic/gin"
 )

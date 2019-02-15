@@ -1,10 +1,10 @@
 package handler
 
 import (
-	"apiserver/util"
+	"github.com/muxih4ck/Go-Web-Application-Template/util"
 	"net/http"
 
-	"apiserver/pkg/errno"
+	"github.com/muxih4ck/Go-Web-Application-Template/pkg/errno"
 
 	"github.com/gin-gonic/gin"
 	"github.com/lexkong/log"

@@ -1,10 +1,10 @@
 package user
 
 import (
-	"apiserver/config"
-	"apiserver/model"
-	"apiserver/router/middleware"
-	"apiserver/util"
+	"github.com/muxih4ck/Go-Web-Application-Template/config"
+	"github.com/muxih4ck/Go-Web-Application-Template/model"
+	"github.com/muxih4ck/Go-Web-Application-Template/router/middleware"
+	"github.com/muxih4ck/Go-Web-Application-Template/util"
 	"encoding/json"
 	"net/http"
 	"os"

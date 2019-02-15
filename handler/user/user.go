@@ -1,7 +1,7 @@
 package user
 
 import (
-	"apiserver/model"
+	"github.com/muxih4ck/Go-Web-Application-Template/model"
 )
 
 type CreateRequest struct {
