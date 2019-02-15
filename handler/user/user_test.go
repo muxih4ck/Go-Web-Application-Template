@@ -1,30 +1,42 @@
 package user
 
 import (
+	"apiserver/config"
 	"apiserver/model"
 	"apiserver/router/middleware"
 	"bytes"
 	"encoding/json"
-	"github.com/gin-gonic/gin"
-	"github.com/spf13/pflag"
-	"io/ioutil"
+	"fmt"
 	"net/http"
 	"net/http/httptest"
+	"os"
 	"strconv"
 	"testing"
 	"time"
-)
 
+	"github.com/gin-gonic/gin"
+)
 
 var (
-	cfgTest  = pflag.StringP("config", "t", "", "apiserver config file path.")
-	g        *gin.Engine
-	tokenString    string
-	username string
-	password string
-	uid      uint64
+	g           *gin.Engine
+	tokenString string
+	username    string
+	password    string
+	uid         uint64
 )
 
+func TestMain(m *testing.M) {
+
+	// init config
+	if err := config.Init(""); err != nil {
+		panic(err)
+	}
+	// init db
+	model.DB.Init()
+	defer model.DB.Close()
+
+	os.Exit(m.Run())
+}
 func TestLogin(t *testing.T) {
 	g := getRouter(true)
 
@@ -41,20 +53,21 @@ func TestLogin(t *testing.T) {
 	req.Header.Set("Content-Type", "application/json")
 	w := httptest.NewRecorder()
 	g.ServeHTTP(w, req)
-	result := w.Result()
+	// result := w.Result()
 
-	defer result.Body.Close()
+	// defer result.Body.Close()
 
 	// 读取响应body,获取tokenString
 	var data model.LoginResponse
-	bodyByte, _ := ioutil.ReadAll(result.Body)
-	if err := json.Unmarshal(bodyByte, &data); err != nil {
+	// bodyByte, _ := ioutil.ReadAll(result.Body)
+	fmt.Println("fwefwef", w.Body.String())
+	if err := json.Unmarshal([]byte(w.Body.String()), &data); err != nil {
 		t.Errorf("Test error: Get LoginResponse Error:%s", err.Error())
 	}
 	tokenString = data.Data.Token
 
-	if result.StatusCode != http.StatusOK {
-		t.Errorf("Test Error: StatusCode Error:%d", result.StatusCode)
+	if w.Code != http.StatusOK {
+		t.Errorf("Test Error: StatusCode Error:%d", w.Code)
 	}
 }
 

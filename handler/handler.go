@@ -46,4 +46,3 @@ func SendError(c *gin.Context, err error, data interface{}, cause string) {
 		Data:    data,
 	})
 }
-

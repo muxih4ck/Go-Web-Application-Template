@@ -39,6 +39,7 @@ func (u *UserModel) Update() error {
 // GetUser gets an user by the user identifier.
 func GetUser(username string) (*UserModel, error) {
 	u := &UserModel{}
+	fmt.Println("hahh")
 	d := DB.Self.Where("username = ?", username).First(&u)
 	return u, d.Error
 }

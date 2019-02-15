@@ -1,5 +1,5 @@
 all: gotool
-	@go build -mod vendor -o main -v .
+	@go build -o main -v .
 build: gotool
 	@go build -o main -v .
 clean:
