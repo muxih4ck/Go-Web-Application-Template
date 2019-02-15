@@ -17,4 +17,4 @@ db:  # DB 配置 部署时环境变量覆盖
   name: db_apiserver
   addr: 0.0.0.0:3306
   username: root
-  password: root
+  password:
