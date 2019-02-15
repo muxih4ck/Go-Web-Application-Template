@@ -4,11 +4,9 @@ import (
 	"apiserver/config"
 	"apiserver/model"
 	"apiserver/router/middleware"
-	"bytes"
+	"apiserver/util"
 	"encoding/json"
-	"fmt"
 	"net/http"
-	"net/http/httptest"
 	"os"
 	"strconv"
 	"testing"
@@ -49,18 +47,11 @@ func TestLogin(t *testing.T) {
 	if err != nil {
 		t.Errorf("Test Error: %s", err.Error())
 	}
-	req := httptest.NewRequest(http.MethodPost, uri, bytes.NewReader(jsonByte))
-	req.Header.Set("Content-Type", "application/json")
-	w := httptest.NewRecorder()
-	g.ServeHTTP(w, req)
-	// result := w.Result()
-
-	// defer result.Body.Close()
+	w := util.PerformRequestWithBody(http.MethodPost, g, uri, jsonByte, "")
 
 	// 读取响应body,获取tokenString
-	var data model.LoginResponse
-	// bodyByte, _ := ioutil.ReadAll(result.Body)
-	fmt.Println("fwefwef", w.Body.String())
+	var data LoginResponse
+
 	if err := json.Unmarshal([]byte(w.Body.String()), &data); err != nil {
 		t.Errorf("Test error: Get LoginResponse Error:%s", err.Error())
 	}
@@ -86,11 +77,7 @@ func TestCreate(t *testing.T) {
 	if err != nil {
 		t.Errorf("Test Error: %s", err.Error())
 	}
-	req := httptest.NewRequest(http.MethodPost, uri, bytes.NewReader(jsonByte))
-	req.Header.Set("Authorization", "Bearer "+tokenString)
-	req.Header.Set("Content-Type", "application/json")
-	w := httptest.NewRecorder()
-	g.ServeHTTP(w, req)
+	w := util.PerformRequestWithBody(http.MethodPost, g, uri, jsonByte, tokenString)
 	result := w.Result()
 
 	// GetUid
@@ -108,11 +95,7 @@ func TestCreate(t *testing.T) {
 func TestGet(t *testing.T) {
 	g := getRouter(true)
 	uri := "/v1/user/" + username
-
-	req := httptest.NewRequest(http.MethodGet, uri, nil)
-	req.Header.Set("Authorization", "Bearer "+tokenString)
-	w := httptest.NewRecorder()
-	g.ServeHTTP(w, req)
+	w := util.PerformRequest(http.MethodGet, g, uri, tokenString)
 	result := w.Result()
 
 	if result.StatusCode != http.StatusOK {
@@ -131,11 +114,7 @@ func TestUpdate(t *testing.T) {
 	if err != nil {
 		t.Errorf("Test Error: %s", err.Error())
 	}
-	req := httptest.NewRequest(http.MethodPut, uri, bytes.NewReader(jsonByte))
-	req.Header.Set("Authorization", "Bearer "+tokenString)
-	req.Header.Set("Content-Type", "application/json")
-	w := httptest.NewRecorder()
-	g.ServeHTTP(w, req)
+	w := util.PerformRequestWithBody(http.MethodPut, g, uri, jsonByte, tokenString)
 	result := w.Result()
 	if result.StatusCode != http.StatusOK {
 		t.Errorf("Test Error: StatusCode Error:%d", result.StatusCode)
@@ -145,11 +124,7 @@ func TestUpdate(t *testing.T) {
 func TestList(t *testing.T) {
 	g := getRouter(true)
 	uri := "/v1/user"
-
-	req := httptest.NewRequest(http.MethodGet, uri, nil)
-	req.Header.Set("Authorization", "Bearer "+tokenString)
-	w := httptest.NewRecorder()
-	g.ServeHTTP(w, req)
+	w := util.PerformRequest(http.MethodGet, g, uri, tokenString)
 	result := w.Result()
 
 	if result.StatusCode != http.StatusOK {
@@ -160,17 +135,12 @@ func TestList(t *testing.T) {
 func TestDelete(t *testing.T) {
 	g := getRouter(true)
 	uri := "/v1/user/" + strconv.FormatInt(int64(uid), 10)
-
-	req := httptest.NewRequest(http.MethodDelete, uri, nil)
-	req.Header.Set("Authorization", "Bearer "+tokenString)
-	w := httptest.NewRecorder()
-	g.ServeHTTP(w, req)
+	w := util.PerformRequest(http.MethodDelete, g, uri, tokenString)
 	result := w.Result()
 
 	if result.StatusCode != http.StatusOK {
 		t.Errorf("Test Error: StatusCode Error:%d", result.StatusCode)
 	}
-
 }
 
 // Helper function to create a router during testing

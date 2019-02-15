@@ -34,7 +34,7 @@ CREATE TABLE `tb_users` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `tb_users`
+-- Insert mock data
 --
 
 LOCK TABLES `tb_users` WRITE;
