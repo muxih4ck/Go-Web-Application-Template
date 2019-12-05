@@ -1,11 +1,12 @@
 all: gotool
 	@go build -o main -v .
 clean:
-	rm -f apiserver
+	rm -f main
 	find . -name "[._]*.s[a-w][a-z]" | xargs -i rm -f {}
 gotool:
 	gofmt -w .
-	go tool vet . | grep -v vendor;true
+	go mod tidy
+	go vet .
 test:
 	@go test -v -count=1  ./...
 ca:

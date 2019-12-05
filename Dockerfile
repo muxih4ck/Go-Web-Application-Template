@@ -1,6 +1,7 @@
-FROM golang:latest 
-RUN mkdir /app 
-ADD . /app/ 
-WORKDIR /app 
-RUN go build --mod vendor -o main . 
-CMD ["/app/main"]
+FROM golang:1.12.13 
+ENV GO111MODULE "on"
+WORKDIR $GOPATH/src/github.com/muxih4ck/Go-Web-Application-Template
+COPY . $GOPATH/src/github.com/muxih4ck/Go-Web-Application-Template
+RUN make
+EXPOSE 8080
+CMD ["./main"]
