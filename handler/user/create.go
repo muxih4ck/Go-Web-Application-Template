@@ -2,18 +2,19 @@ package user
 
 import (
 	. "github.com/muxih4ck/Go-Web-Application-Template/handler"
+	"github.com/muxih4ck/Go-Web-Application-Template/log"
 	"github.com/muxih4ck/Go-Web-Application-Template/model"
 	"github.com/muxih4ck/Go-Web-Application-Template/pkg/errno"
 	"github.com/muxih4ck/Go-Web-Application-Template/util"
+	"go.uber.org/zap"
 
 	"github.com/gin-gonic/gin"
-	"github.com/lexkong/log"
-	"github.com/lexkong/log/lager"
 )
 
 // Create creates a new user account.
 func Create(c *gin.Context) {
-	log.Info("User Create function called.", lager.Data{"X-Request-Id": util.GetReqID(c)})
+	log.Info("User Create function called.",
+		zap.String("X-Request-Id", util.GetReqID(c)))
 	var r CreateRequest
 	if err := c.Bind(&r); err != nil {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error())

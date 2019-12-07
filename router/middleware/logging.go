@@ -3,15 +3,17 @@ package middleware
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
+	"go.uber.org/zap"
 	"io/ioutil"
 	"regexp"
 	"time"
 
 	"github.com/muxih4ck/Go-Web-Application-Template/handler"
+	"github.com/muxih4ck/Go-Web-Application-Template/log"
 	"github.com/muxih4ck/Go-Web-Application-Template/pkg/errno"
 
 	"github.com/gin-gonic/gin"
-	"github.com/lexkong/log"
 	"github.com/willf/pad"
 )
 
@@ -73,7 +75,9 @@ func Logging() gin.HandlerFunc {
 		// get code and message
 		var response handler.Response
 		if err := json.Unmarshal(blw.body.Bytes(), &response); err != nil {
-			log.Errorf(err, "response body can not unmarshal to model.Response struct, body: `%s`", blw.body.Bytes())
+			log.Error("JSON unmarshal failed",
+				zap.String("reason", err.Error()),
+				zap.String("detail", fmt.Sprintf("response body can not unmarshal to model.Response struct, body: `%s`", blw.body.Bytes())))
 			code = errno.InternalServerError.Code
 			message = err.Error()
 		} else {
@@ -81,6 +85,13 @@ func Logging() gin.HandlerFunc {
 			message = response.Message
 		}
 
-		log.Infof("%-13s | %-12s | %s %s | {code: %d, message: %s}", latency, ip, pad.Right(method, 5, ""), path, code, message)
+		log.Info(
+			fmt.Sprintf("%-13s | %-12s | %s %s | {code: %d, message: %s}",
+				latency,
+				ip,
+				pad.Right(method, 5, ""),
+				path,
+				code,
+				message))
 	}
 }

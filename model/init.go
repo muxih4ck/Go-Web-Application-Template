@@ -2,8 +2,9 @@ package model
 
 import (
 	"fmt"
+	"go.uber.org/zap"
 
-	"github.com/lexkong/log"
+	"github.com/muxih4ck/Go-Web-Application-Template/log"
 	"github.com/spf13/viper"
 
 	// MySQL driver.
@@ -29,7 +30,9 @@ func openDB(username, password, addr, name string) *gorm.DB {
 
 	db, err := gorm.Open("mysql", config)
 	if err != nil {
-		log.Errorf(err, "Database connection failed. Database name: %s", name)
+		log.Error("Open database failed",
+			zap.String("reason", err.Error()),
+			zap.String("detail", fmt.Sprintf("Database connection failed. Database name: %s", name)))
 	}
 
 	// set for db connection

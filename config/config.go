@@ -3,8 +3,6 @@ package config
 import (
 	"strings"
 
-	"github.com/fsnotify/fsnotify"
-	"github.com/lexkong/log"
 	"github.com/spf13/viper"
 )
 
@@ -23,10 +21,12 @@ func Init(cfg string) error {
 	}
 
 	// 初始化日志包
-	c.initLog()
+	// 2019-12-08 deleted
+	// c.initLog()
 
 	// 监控配置文件变化并热加载程序
-	c.watchConfig()
+	// 2019-12-08 deleted
+	// c.watchConfig()
 
 	return nil
 }
@@ -51,6 +51,8 @@ func (c *Config) initConfig() error {
 	return nil
 }
 
+/* 2019-12-08, 更改技术栈，将lexkong/log改为使用go.uber.org/zap
+
 func (c *Config) initLog() {
 	passLagerCfg := log.PassLagerCfg{
 		Writers:        viper.GetString("log.writers"),
@@ -73,3 +75,5 @@ func (c *Config) watchConfig() {
 		log.Infof("Config file changed: %s", e.Name)
 	})
 }
+
+*/

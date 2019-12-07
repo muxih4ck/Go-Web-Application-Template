@@ -2,18 +2,21 @@ package main
 
 import (
 	"errors"
+	"fmt"
 	"net/http"
 	"time"
 
 	"github.com/muxih4ck/Go-Web-Application-Template/config"
+	"github.com/muxih4ck/Go-Web-Application-Template/log"
 	"github.com/muxih4ck/Go-Web-Application-Template/model"
 	"github.com/muxih4ck/Go-Web-Application-Template/router"
 	"github.com/muxih4ck/Go-Web-Application-Template/router/middleware"
 
 	"github.com/gin-gonic/gin"
-	"github.com/lexkong/log"
 	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
+
+	"go.uber.org/zap"
 )
 
 var (
@@ -27,6 +30,9 @@ func main() {
 	if err := config.Init(*cfg); err != nil {
 		panic(err)
 	}
+
+	// logger sync
+	defer log.SyncLogger()
 
 	// init db
 	model.DB.Init()
@@ -43,7 +49,7 @@ func main() {
 		// Cores.
 		g,
 
-		// Middlwares.
+		// MiddleWares.
 		middleware.Logging(),
 		middleware.RequestId(),
 	)
@@ -51,12 +57,14 @@ func main() {
 	// Ping the server to make sure the router is working.
 	go func() {
 		if err := pingServer(); err != nil {
-			log.Fatal("The router has no response, or it might took too long to start up.", err)
+			log.Fatal("The router has no response, or it might took too long to start up.",
+				zap.String("reason", err.Error()))
 		}
 		log.Info("The router has been deployed successfully.")
 	}()
 
-	log.Infof("Start to listening the incoming requests on http address: %s", viper.GetString("addr"))
+	log.Info(
+		fmt.Sprintf("Start to listening the incoming requests on http address: %s", viper.GetString("addr")))
 	log.Info(http.ListenAndServe(viper.GetString("addr"), g).Error())
 }
 

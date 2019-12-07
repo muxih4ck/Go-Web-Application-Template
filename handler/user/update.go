@@ -1,6 +1,8 @@
 package user
 
 import (
+	"github.com/muxih4ck/Go-Web-Application-Template/log"
+	"go.uber.org/zap"
 	"strconv"
 
 	. "github.com/muxih4ck/Go-Web-Application-Template/handler"
@@ -9,8 +11,6 @@ import (
 	"github.com/muxih4ck/Go-Web-Application-Template/util"
 
 	"github.com/gin-gonic/gin"
-	"github.com/lexkong/log"
-	"github.com/lexkong/log/lager"
 )
 
 // Update update a exist user account info.
@@ -19,7 +19,8 @@ func Update(c *gin.Context) {
 		postData model.UserModel
 	)
 
-	log.Info("Update function called.", lager.Data{"X-Request-Id": util.GetReqID(c)})
+	log.Info("Update function called.",
+		zap.String("X-Request-Id", util.GetReqID(c)))
 	// Get the user id from the url parameter.
 	userID, _ := strconv.Atoi(c.Param("id"))
 
