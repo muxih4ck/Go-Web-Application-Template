@@ -5,4 +5,4 @@ WORKDIR $GOPATH/src/github.com/muxih4ck/Go-Web-Application-Template
 COPY . $GOPATH/src/github.com/muxih4ck/Go-Web-Application-Template
 RUN make
 EXPOSE 8080
-CMD ["./main", "-c", "conf/config.yml"]
+CMD ["./main", "-c", "conf/config.yaml"]
