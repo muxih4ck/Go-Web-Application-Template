@@ -1,6 +1,6 @@
 ## 木犀团队 Go Web 工程模板
 
-![](https://travis-ci.org/muxih4ck/Go-Web-Application-Template.svg?branch=master)
+![](https://github.com/muxih4ck/Go-Web-Application-Template/workflows/build-test/badge.svg)
 
 ### 简介
 
@@ -11,7 +11,6 @@ Go HTTP 服务工程模板。参考自掘金小册[基于 Go 语言构建企业�
 ### Build and run
 
 ```
-mkdir $GOPATH/src/github.com/muxih4ck && cd $GOPATH/src/github.com/muxih4ck
 git clone https://github.com/muxih4ck/Go-Web-Application-Template.git
 cd Go-Web-Application-Template
 make

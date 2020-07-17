@@ -1,8 +1,10 @@
 .DS_Store
 main
-log/*.log
+logs
 *.log
 .idea
 *.xml
 *.iml
 *.out
+.vscode
+.idea

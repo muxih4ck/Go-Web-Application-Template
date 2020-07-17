@@ -2,15 +2,16 @@ package user
 
 import (
 	"encoding/json"
-	"github.com/muxih4ck/Go-Web-Application-Template/config"
-	"github.com/muxih4ck/Go-Web-Application-Template/model"
-	"github.com/muxih4ck/Go-Web-Application-Template/router/middleware"
-	"github.com/muxih4ck/Go-Web-Application-Template/util"
 	"net/http"
 	"os"
 	"strconv"
 	"testing"
 	"time"
+
+	"github.com/muxih4ck/Go-Web-Application-Template/config"
+	"github.com/muxih4ck/Go-Web-Application-Template/model"
+	"github.com/muxih4ck/Go-Web-Application-Template/router/middleware"
+	"github.com/muxih4ck/Go-Web-Application-Template/util"
 
 	"github.com/gin-gonic/gin"
 )
@@ -26,7 +27,7 @@ var (
 func TestMain(m *testing.M) {
 
 	// init config
-	if err := config.Init(""); err != nil {
+	if err := config.Init("../../conf/config.yaml"); err != nil {
 		panic(err)
 	}
 	// init db
