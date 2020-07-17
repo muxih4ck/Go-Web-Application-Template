@@ -30,7 +30,7 @@ jobs:
       - name: Create Database
         run: |
           sudo systemctl start mysql.service 
-          mysql --user root --password root < db.sql
+          mysql -u root -proot < db.sql
       - name: Build
         run: make
       - name: Test
